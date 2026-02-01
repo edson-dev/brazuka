@@ -27,6 +27,15 @@ This document reflects the actual layout in this repo, and this repo is inported
 ```
 
 ---
+## Don't change skills or external libraries
+
+check the language used and avoid change external libraries used or skills instructions. Example:
+
+- **Python**: Avoid using `import` statements to change external libraries.
+- **JavaScript**: Avoid using `require` statements to change external libraries.
+- **Godot**: Dont edit the addons fodler.
+
+---
 
 ## ⚙️ Skill-First Runtime
 
