@@ -64,6 +64,18 @@ This skill provides GDScript-specific rules for writing correct, maintainable Go
 ## Common Pitfalls
 - Mixing `@export` and `@onready` on the same property causes initialization issues.
 - Assigning an untyped array directly to a typed array without `assign()`.
+- `Object.get("prop")` is not `Dictionary.get("key", default)`:
+  - `Object.get()` (used on Resources/Nodes) accepts only one argument and returns `null` if missing.
+  - `Dictionary.get(key, default)` accepts a default value and is safe for optional keys.
+- If you want a default value when reading from an Object (Resource/Node), wrap it:
+  - Use a small helper like `_obj_get_or(obj, "prop", default)` that calls `obj.get("prop")` and falls back when it returns `null`.
+- If Godot cannot infer a variable type in typed code, annotate it explicitly:
+  - Prefer `var x := some_typed_expression()` when possible.
+  - Otherwise use `var x: Vector2i = ...` / `var x: Dictionary = ...` to avoid “Cannot infer type” parser errors.
+- In expressions that mix ints with `max()/min()/clamp()` or bit shifts, inference can fail; prefer explicit `: int` annotations.
+- If a value comes from `Variant` (Object.get / Dictionary data / RPC payloads), Godot may treat inference as `Variant` and some projects treat that warning as an error. Prefer explicit annotations like `var delay_ms: int = int(v)` and `var color: Color = v`.
+- Typed arrays are strict: don’t assign/cast `Array` into `Array[T]`.
+  - Prefer `var tiles: Array[Vector2i] = []` and append only `Vector2i` items (manual copy), instead of `tiles_v as Array[Vector2i]`.
 - Treating integer division as floating division.
 
 ## Sources
